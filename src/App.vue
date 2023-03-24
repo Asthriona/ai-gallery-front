@@ -3,7 +3,6 @@
     <nav>
       <h1><router-link to="/">Mako's AI Adventures!!!</router-link></h1>
     </nav>
-    <h4>I shall add very soon an option to view single images! I'm doing the code rn!!!!!</h4>
     <router-view/>
   </div>
 </template>

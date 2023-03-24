@@ -1,17 +1,18 @@
 <template>
     <div>
         <div class="blur-toggle">
-            <label class="switch">
+            <!-- <label class="switch">
                 <input type="checkbox" v-model="hideNsfw" @change="blurToggle">
                 <span class="slider round"></span>
             </label>
-            <span>Hide NSFW</span> <br />
+            <span>Hide NSFW</span> <br /> -->
         </div>
         <div class="warning">
             <h4>Carfull Friend! I need to manually add the NSFW tag in the database, so some might not be tagged yet sowwy!</h4>
+            <h4>Hovering a blurred image will reveal it.</h4>
         </div>
         <div class="images">
-            <router-link v-for="img in imageLinks" :key="img._id" :to="`/${img._id}`"><img :src="img.src" :alt="img.alt" :class="img.nsfw == true && hideNsfw == true ? 'blur' : `${img.name}-${img.id}`" height="500px"></router-link>
+            <router-link v-for="img in imageLinks" :key="img._id" :to="`/${img._id}`"><img :src="img.src" :alt="img.alt" :class="img.nsfw == true && hideNsfw == true ? 'blur' : `${img.name}-${img.id}`" height="500px" lazy></router-link>
         </div>
     </div>
 </template>
