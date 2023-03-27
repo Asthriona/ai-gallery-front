@@ -11,8 +11,11 @@
             <h4>Carfull Friend! I need to manually add the NSFW tag in the database, so some might not be tagged yet sowwy!</h4>
             <h4>Hovering a blurred image will reveal it.</h4>
         </div>
-        <div class="images">
-            <router-link v-for="img in imageLinks" :key="img._id" :to="`/${img._id}`"><img :src="img.src" :alt="img.alt" :class="img.nsfw == true && hideNsfw == true ? 'blur' : `${img.name}-${img.id}`" height="500px" lazy></router-link>
+        <div class="image-array">
+            <div class="image-container" v-for="img in imageLinks" :key="img._id">
+            <router-link :to="`/i/${img._id}`"><img :src="img.src" :alt="img.alt" :class="img.nsfw == true && hideNsfw == true ? 'blur' : `${img.name}-${img.id}`" height="500px" lazy></router-link>
+            <div class="alt-text">{{  img.alt  }}</div>
+        </div>
         </div>
     </div>
 </template>
@@ -32,12 +35,31 @@ export default {
         if(!localStorage.nsfw) localStorage.hideNsfw = true;
     },
     mounted() {
-        axios.get(`${process.env.VUE_APP_URI}images`)
+        this.getImages();
+        setInterval(this.updateImages, 10000);
+    },
+    methods: {
+        // every few update all images.
+        updateImages() {
+            axios.get(`${process.env.VUE_APP_URI}/images`)
+                .then(res => {
+                    if(res.data === this.imageLinks) return;
+                    this.imageLinks = res.data;
+                })
+                .catch((err) => {
+                    return err;
+                })
+        },
+        // First load
+        getImages() {
+            axios.get(`${process.env.VUE_APP_URI}/images`)
             .then(res => {
                 this.imageLinks = res.data;
             })
-    },
-    methods: {
+            .catch((err) => {
+                return err;
+            })
+        },
         blurToggle() {
             // If nsfw is false, set it to true
             if(!this.nsfw) {
@@ -139,5 +161,38 @@ img:hover {
 /* blur hover set blur to 0 */
 img:hover.blur {
     filter: blur(0px);
+}
+/* alt at on the image at the bottom */
+img:hover:after {
+    content: attr(alt);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 5px;
+}
+.image-array {
+    display: flex;
+    flex-wrap: wrap;
+}
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.alt-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 5%;
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
