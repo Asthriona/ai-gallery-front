@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import singleImg from '../views/singleImg.vue'
+import adminHome from '../views/admin/adminHome.vue'
 
 Vue.use(VueRouter)
 
@@ -12,9 +13,14 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/:id',
-    name: 'sing-img',
+    path: '/i/:id',
+    name: 'single-img',
     component: singleImg
+  },
+  {
+    path: '/admin',
+    name: 'admin-home',
+    component: adminHome
   },
   {
     path: '/about',
